@@ -93,23 +93,27 @@ public class DataManager {
 	    	while(ze!=null){
 	 
 	    	   String fileName = ze.getName();
-	           File newFile = new File(outputFolder + File.separator + fileName);
-	 
-	           System.out.println("file unzip : "+ newFile.getAbsoluteFile());
-	 
-	            //create all non exists folders
-	            //else you will hit FileNotFoundException for compressed folder
-	            new File(newFile.getParent()).mkdirs();
-	 
-	            FileOutputStream fos = new FileOutputStream(newFile);             
-	 
-	            int len;
-	            while ((len = zis.read(buffer)) > 0) {
-	       		fos.write(buffer, 0, len);
-	            }
-	 
-	            fos.close();   
-	            ze = zis.getNextEntry();
+	    	   
+	    	   if ( fileName.contains(".pk3") || fileName.contains("readme.txt")) {
+		           File newFile = new File(outputFolder + File.separator + fileName);
+		 
+		           System.out.println("file unzip : "+ newFile.getAbsoluteFile());
+		 
+		            //create all non exists folders
+		            //else you will hit FileNotFoundException for compressed folder
+		            new File(newFile.getParent()).mkdirs();
+		 
+		            FileOutputStream fos = new FileOutputStream(newFile);             
+		 
+		            int len;
+		            while ((len = zis.read(buffer)) > 0) {
+		       		fos.write(buffer, 0, len);
+		            }
+		 
+		            fos.close();
+	    	   }
+	    	   
+	           ze = zis.getNextEntry();
 	    	}
 	 
 	        zis.closeEntry();
