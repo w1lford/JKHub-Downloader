@@ -80,7 +80,11 @@ public class GUIDriver extends JFrame{
 			String line;
 			while ((line = reader.readLine()) != null) {
 			    basePathBox.setText(line);
+			    basePath = line;
 			}
+			
+			reader.close();
+			
 		} else {
 			 basePathBox.setText("Browse Jedi Academy base folder...");
 		}
