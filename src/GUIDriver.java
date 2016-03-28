@@ -26,50 +26,39 @@ import java.awt.event.ActionListener;
 
 public class GUIDriver extends JFrame{
 	
-	static DataManager dm = new DataManager();
-	
-	public static JPanel topPanel = new JPanel();
+	//Gui objects
+	public static JPanel topPanel = new JPanel(); 
 	public static JPanel categoryPanel = new JPanel();
 	public static JPanel modPanel = new JPanel();
 	public static JPanel pagePanel = new JPanel();
-	static String html = dm.getHTML("http://jkhub.org/files/");
-	public static int selectedPage = 1;
-	static ArrayList<ModCategory> listOfCategories = dm.getCategories(html);
-	public static ArrayList<Mod> theMods = new ArrayList<Mod>();
-	
-	public static Mod selectedMod;
-	
 	public static JButton nextPageButton = new JButton("Next Page");
 	public static JButton prevPageButton = new JButton("Prev Page");
 	public static JButton browseButton = new JButton("Browse...");
 	public static JLabel pageStatus;
 	public static JLabel selectedPageDisplay = new JLabel("");
-	public static ModCategory selectedCategory;
 	public static JTextField basePathBox = new JTextField(30);
-	
 	public static JLabel statusIndicator = new JLabel("Ready");
+	
+	//Data objects
+	static DataManager dm = new DataManager();
+	public static ModCategory selectedCategory;
+	public static Mod selectedMod;
+	static String html = dm.getHTML("http://jkhub.org/files/");
+	public static int selectedPage = 1;
+	static ArrayList<ModCategory> listOfCategories = dm.getCategories(html);
+	public static ArrayList<Mod> theMods = new ArrayList<Mod>();
 	
 	final String OS = System.getProperty("os.name");
 	final String TEMP_DIR = System.getProperty("java.io.tmpdir");
 	final static String HOME_DIR = System.getProperty("user.home");
 	
 	public static File dataCache = new File(HOME_DIR + "/JKHubDownloaderCache.dat");
-	
 	public static PrintWriter writer;
-	
 	public static JButton[] downloadButtons;
-	
 	public static String basePath = "";
 	
 	public GUIDriver() throws IOException{
 		super("JKHub Downloader");
-		
-		/*
-		if(OS.equals("Mac OS X")){
-			
-			basePath = HOME_DIR + "/Library/Application Support/Jedi Academy/base";
-		}
-		*/
 		
 		if(dataCache.exists()){
 			
@@ -104,12 +93,9 @@ public class GUIDriver extends JFrame{
 		this.add(pagePanel,BorderLayout.SOUTH);
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//this.add(new JLabel("afsdasdf"));
 		
-		//categoryPanel.setLayout(new GridLayout(30,1));
 		this.setVisible(true);
-	
-		
+
 	}
 	
 	public static class ButtonListener implements ActionListener{
@@ -125,8 +111,6 @@ public class GUIDriver extends JFrame{
 				
 				modPanel.setLayout(new GridLayout(theMods.size(),2));
 				modPanel.add(new JLabel(theMods.get(j).getName()));
-				
-				//JButton downloadButton = new JButton("Download");
 				
 				downloadButtons[j] = new JButton("Download");
 				
@@ -145,7 +129,6 @@ public class GUIDriver extends JFrame{
 			if(selectedPage < 2){
 				prevPageButton.setEnabled(false);
 			} else {
-				
 				prevPageButton.setEnabled(true);
 			}
 			
@@ -157,11 +140,9 @@ public class GUIDriver extends JFrame{
 			
 		}
 		
-		
 		@Override
 		public void actionPerformed(ActionEvent e){
-			// TODO Auto-generated method stub
-			
+
 			modPanel.removeAll();
 			modPanel.repaint();
 			pagePanel.removeAll();
@@ -169,12 +150,11 @@ public class GUIDriver extends JFrame{
 			
 			if(e.getSource() == browseButton){
 				
-				  JFileChooser f = new JFileChooser();
+			JFileChooser f = new JFileChooser();
 			      f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
 			      f.showOpenDialog(null);
 			      
 			      basePath = f.getSelectedFile().getPath().toString();
-			      
 			      
 			      System.out.println(basePath);
 			      
@@ -192,13 +172,6 @@ public class GUIDriver extends JFrame{
 						e1.printStackTrace();
 						
 					}
-					
-			
-					
-							      
-		
-			      
-		
 			      
 			      updateGUI();
 				
@@ -213,16 +186,12 @@ public class GUIDriver extends JFrame{
 						try {
 
 							File downloadedFile = dm.downloadMod(theMods.get(i), basePath);
-							
 							System.out.println("Downloaded: " + theMods.get(i).getName());
-							
 							dm.decompress(downloadedFile.getAbsolutePath(),downloadedFile.getParent());
-							
 							System.out.println("Decompressed file.");
-							
 							statusIndicator.setText("Downloaded '" + theMods.get(i).getName()+"'");
 							
-							 int reply = JOptionPane.showConfirmDialog(null, "Download complete. Would you like to view the readme file?", "Download complete", JOptionPane.YES_NO_OPTION);
+							int reply = JOptionPane.showConfirmDialog(null, "Download complete. Would you like to view the readme file?", "Download complete", JOptionPane.YES_NO_OPTION);
 						        if (reply == JOptionPane.YES_OPTION) {
 						        
 						          System.out.println(downloadedFile.getParent());
@@ -259,7 +228,6 @@ public class GUIDriver extends JFrame{
 							e1.printStackTrace();
 						}
 					}
-					
 
 				}
 				
@@ -286,8 +254,6 @@ public class GUIDriver extends JFrame{
 				//If the user has clicked an auto generated button.
 				if(e.getActionCommand() == listOfCategories.get(i).getName()){
 					
-					
-					
 					//This if statement prevents action listeners from aggregating and causing a mess.
 					if(selectedCategory == null){
 						nextPageButton.addActionListener(this);
@@ -311,7 +277,6 @@ public class GUIDriver extends JFrame{
 	}
 	
 	public static void main(String[] args) throws MalformedURLException, FileNotFoundException, IOException {
-		// TODO Auto-generated method stub
 		
 		GUIDriver gui = new GUIDriver();
 		
@@ -326,10 +291,8 @@ public class GUIDriver extends JFrame{
 		}
 	
 		categoryPanel.setLayout(new GridLayout(listOfCategories.size(),1));
-		
 		gui.validate();
 		
 	}
-
 
 }
